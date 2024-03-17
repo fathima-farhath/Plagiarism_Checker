@@ -26,7 +26,7 @@
                     {% endif %} -->
             
                     <!-- <form method="POST"> -->
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
                         
                         <div class="form-group">
                 
@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                      
-                            <input type="email" name="username" class="form-control" id="email" placeholder="Type Your Email" required>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Type Your Email" required>
                         </div>
                         <div class="form-group">
                           
@@ -70,7 +70,7 @@
             <br>
 
 
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
                 
                 <div class="form-group">
     
@@ -88,9 +88,9 @@
          
                     <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm Your Password" required>
                 </div>
-                <div class="form-group">
+                {% comment %} <div class="form-group">
                     <input type="file" name="image" class="form-control" id="image" required>
-                </div>
+                </div> {% endcomment %}
                 <button type="submit" class="btn btn-primary" style="width:100%; margin:0 auto;" >Sign Up</button>
             </form>
             <hr>
