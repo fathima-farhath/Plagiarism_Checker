@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'plagiarism.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Plagiarism_Checker',
+        'USER' : 'postgres',
+        'PASSWORD': '631',
+        'HOST':'localhost'
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
