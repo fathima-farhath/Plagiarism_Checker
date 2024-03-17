@@ -1,9 +1,8 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% block title %}| Meet Classroom {% endblock %}
+{% block title %}| WorkSpaces {% endblock %}
 {% block css %}
 .s_box{
-    
     position: relative;
     box-shadow: 2px 1px 7px 1px #e6e6e6;
     border-radius: 10px;
@@ -19,13 +18,147 @@
     width:20%;
     height:auto;
 }
+.plag_check_container {
+    text-align:center;
+    position: fixed;
+    top: 20%;
+    right: 2%;
+    width: 400px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px dotted #dee2e6;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.plag_check_container h4 {
+    margin-bottom: 20px;
+    color:black;
+    font-weight:bold;
+    text-align:center;
+   
+}
+.plag_check_container button {
+    margin-bottom: 10px;                
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow,transform;
+    background: radial-gradient( 100% 100% at 100% 0%, #89E5FF 0%, #5468FF 100% );
+    box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
+    padding: 0 10px;
+    border-radius: 6px;
+    color: #fff;
+    height: 30px;
+    font-size: 18px;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition: box-shadow 0.15s ease,transform 0.15s ease;
+    :hover {
+        box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #3c4fe0;
+        transform: translateY(-2px);
+    }
+    :active{
+        box-shadow: inset 0px 3px 7px #3c4fe0;
+        transform: translateY(2px);
+    }
+    
+                
+    
+}
+.class_container {
+    overflow-y: auto;
+    max-height: 70vh;
+    padding-right: 20px; /* To prevent content from being hidden behind scrollbar */
+}
+
 {% endblock %}
 
 {% block content %} 
-
 <div class="row" style="margin-top:30px; margin:0;">
+    <!-- Left side container for classes -->
+    <div class="col-md-8 m-4 class_box">
+        <div class="row" style="margin-top:10px; margin:0;">
+        <div class="col-md-5 m-4 class_box">
+            <img src="{% static 'others/class.jpg' %}" alt="">
+            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
+            <h4>DSA</h4>
+            <span>IT-A</span>
+            <br>
+            <a href="#"> View Workspace </a>
+        </div>
+        <div class="col-md-5 m-4 class_box">
+            <img src="{% static 'others/class.jpg' %}" alt="">
+            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
+            <h4>DSA</h4>
+            <span>IT-A</span>
+            <br>
+            <a href="#"> View Class </a>
+        </div>
+        <div class="row" style="margin-top:10px; margin:0;">
+            <div class="col-md-5 m-4 class_box">
+                <img src="{% static 'others/class.jpg' %}" alt="">
+                <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
+                <h4>DSA</h4>
+                <span>IT-A</span>
+                <br>
+                <a href="#"> View Class </a>
+            </div>
+            <div class="col-md-5 m-4 class_box">
+                <img src="{% static 'others/class.jpg' %}" alt="">
+                <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
+                <h4>DSA</h4>
+                <span>IT-A</span>
+                <br>
+                <a href="#"> View Class </a>
+            </div>
+            
+        </div>
+        <!-- More class boxes can be added dynamically -->
+    </div>
+    
+    <!-- Right side container for plagiarism checker -->
+    <div class="col-md-4 m-4 plag_check_container">
+        <h4>Plagiarism Checker</h4>
+        <button onclick="showTextContent()">Insert Text Content</button>
+        <button onclick="showPdfContent()">Upload PDF</button><br>
+        <div id="text_content" style="display: none;">
+            <!-- Text content area -->
+            <textarea rows="5" cols="30"></textarea>
+        </div>
+        <div id="pdf_content" style="display: none; border: 1px dotted #000; padding: 25px;">
+            <!-- Custom styled file upload button -->
+            <div style="border: none; padding: 0;">
+                <label for="pdf_upload" class="custom-file-upload">
+                    <i class="fas fa-file-upload"></i> Upload from your device
+                </label>
+                <!-- Actual file input, hidden from view -->
+                <input type="file" id="pdf_upload" accept="application/pdf" style="display: none;">
+            </div>
+        </div>
+        
+        <br>
+        <button style="margin:0 auto;">Plagiarism Check</button>
+    </div>
+</div>
 
-    {% comment %} <div class="messages" style="position: absolute; top:12%; left:70%; z-index: 1;" >
+<script>
+    function showTextContent() {
+        document.getElementById("text_content").style.display = "block";
+        document.getElementById("pdf_content").style.display = "none";
+    }
+
+    function showPdfContent() {
+        document.getElementById("pdf_content").style.display = "block";
+        document.getElementById("text_content").style.display = "none";
+    }
+</script>
+{% endblock %}
+
+
+
+
+
+  {% comment %} <div class="messages" style="position: absolute; top:12%; left:70%; z-index: 1;" >
         {% for message in messages %}
             <div class="alert alert-primary" {% if message.tags %}
                 class="{{ message.tags }}"{% endif %}>{{ message }}
@@ -48,18 +181,3 @@
     {% endfor %} -->
 
 <!-- New design -->
-
-<div class="col-md-3 m-4 class_box">
-    <img src="" alt="">
-    <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-  
-        <h4>DSA</h4>
-        <span>IT-A</span>
-        <br>
-        <a href="#"> View Class </a>
-</div>
-
-
-</div>
-
-{% endblock %}
