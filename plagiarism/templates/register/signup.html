@@ -27,14 +27,14 @@
             
                     <!-- <form method="POST"> -->
                     <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
-                        
+                        {% csrf_token %}
                         <div class="form-group">
                 
                             <input type="text" name="name" class="form-control" id="email" placeholder="Type Your Name" required>
                         </div>
                         <div class="form-group">
                      
-                            <input type="email" name="email" class="form-control" id="email" placeholder="Type Your Email" required>
+                            <input type="email" name="username" class="form-control" id="email" placeholder="Type Your Email" required>
                         </div>
                         <div class="form-group">
                           
@@ -70,8 +70,8 @@
             <br>
 
 
-            <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
-                
+            <form action="{% url 'student_register' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="form-group">
     
                     <input type="text" name="name" class="form-control" id="email" placeholder="Type Your Name" required>
