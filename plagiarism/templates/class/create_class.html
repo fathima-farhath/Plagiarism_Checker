@@ -9,7 +9,7 @@
     
         <h2 class="text-center">Create Class</h2>
         <br>
-<form action="" method="POST">
+<form action="{% url 'create_class' %}" method="POST">
     {% csrf_token %}
     <div class="form-group">
         <input type="text" name="name" class="form-control" placeholder="Write the Class Name" required>

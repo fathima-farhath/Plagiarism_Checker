@@ -5,8 +5,6 @@ from . import views
 urlpatterns = [
     path('base/base', views.class_base, name='class_base'),
     path('join/',views.join,name='join'),
-
-
     path('',views.index,name='index'),
     path('student_dashboard/', views.student, name = 'student'),
     path('create_class/', views.create_class,name='create_class'),
@@ -18,10 +16,4 @@ urlpatterns = [
     path('teacher_dashboard/',views.teacher, name='teacher'),
     
     path('student_list/',views.people,name='people'),
-
-
-
-    path('base/', views.base, name='base'),
-    path('signup/', views.signup, name = 'signup'),
-    path('login/', views.login, name = 'login'),
 ]
