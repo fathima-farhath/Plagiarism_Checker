@@ -97,7 +97,7 @@ footer{
 .sendbox input[type=text]{
     width: 85%;
     border:none;
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid rgb(128, 128, 128);
     border-radius: 0px;
     background-color: transparent;
 }

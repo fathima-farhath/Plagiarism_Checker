@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
         <ul class="navbar-nav ml-auto">
-                  <li class="nav-item"><a href="{% url 'student' %}" class="nav-link"><i class="fas fa-tachometer-alt"></i>  Dashboard</a></li>
+                  <li class="nav-item"><a href="{% url 'teacher' %}" class="nav-link"><i class="fas fa-tachometer-alt"></i>  Dashboard</a></li>
                 
                   
                 
@@ -20,7 +20,7 @@
                         <a href="" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i></a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             
-                            <a class="dropdown-item" href="">Create Class</a>
+                            <a class="dropdown-item"  href="{% url 'create_class' %}">Create Class</a>
                            
                             <a class="dropdown-item" href="#"  data-toggle="modal" data-target="#joinClass">Join Class</a>
                             
