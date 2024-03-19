@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% block title %}  | WorkSpaces {% endblock %}
+{% block title %}  WorkSpaces {% endblock %}
 {%load static%}
 {% block css %}
 .s_box{
@@ -68,6 +68,34 @@
     max-height: 70vh;
     padding-right: 20px; /* To prevent content from being hidden behind scrollbar */
 }
+.delete_btn {
+    position: absolute;
+    top: 20px; 
+    left: 250px; 
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.icon {
+    
+    display: inline-block;
+    width: auto;
+    height: auto;
+    font-size: inherit;
+    line-height: inherit;
+    color: white;
+}
+.view {
+    text-decoration: none;
+
+}
+
+.view:hover {
+    text-decoration: none;
+  
+}
 
 {% endblock %}
 
@@ -77,48 +105,35 @@
 
 
     <!-- New design -->
-<div class="col-md-8 m-4 class_box">
+<div class="col-md-8 m-2 ">
     <div class="row" style="margin-top:10px; margin:0;">
+        <div class="messages" style="position: absolute; top:12%; left:70%; z-index: 1;" >
+            {% for message in messages %}
+                <div class="alert alert-primary" {% if message.tags %}
+                    class="{{ message.tags }}"{% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        
+            {% endfor %}
+        </div> 
+    </div>
+    <div class="row" style="margin-top:10px; margin:0;">
+         
+        {% for i in workspace %}
         <div class="col-md-5 m-4 class_box">
             <img src="{% static 'others/class.jpg' %}" alt="">
             <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span> Class : IT-A</span><br>
-            <span> Code : <strong>fqq34v</strong> </span><br>
-            <a href=""> View Workspace </a>
+            <h4>{{i.name}}</h4>
+            <span> {{i.stream}}</span><br>
+            <span> Code : <strong>{{i.code}}</strong> </span><br>
+            <a href="{% url 'open_workspace' i.id %}" class="view"> View Workspace </a>
+            <button class="delete_btn " data-id="{{ workspace_item.id }}">
+                <a href ="{% url 'delete_workspace' i.id %}" onclick="return confirmDelete('{{ i.id }}')"><i class="far fa-trash-alt icon"></i> </a><!-- Font Awesome trash icon -->
+            </button>
         </div>
-        <div class="col-md-5 m-4 class_box">
-            <img src="{% static 'others/class.jpg' %}" alt="">
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span> Class : IT-A</span><br>
-            <span> Code : <strong>fqq34v</strong> </span><br>
-            <a href=""> View Workspace </a>
-        </div>
-        <div class="col-md-5 m-4 class_box">
-            <img src="{% static 'others/class.jpg' %}" alt="">
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span> Class : IT-A</span><br>
-            <span> Code : <strong>fqq34v</strong> </span><br>
-            <a href=""> View Workspace </a>
-        </div>
-        <div class="col-md-5 m-4 class_box">
-            <img src="{% static 'others/class.jpg' %}" alt="">
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span> Class : IT-A</span><br>
-            <span> Code : <strong>fqq34v</strong> </span><br>
-            <a href=""> View Workspace </a>
-        </div>
-        <div class="col-md-5 m-4 class_box">
-            <img src="{% static 'others/class.jpg' %}" alt="">
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span> Class : IT-A</span><br>
-            <span> Code : <strong>fqq34v</strong> </span><br>
-            <a href=""> View Workspace </a>
-        </div>
+       {% endfor %}
     </div>
 </div>
 
@@ -156,6 +171,13 @@ function showPdfContent() {
     document.getElementById("pdf_content").style.display = "block";
     document.getElementById("text_content").style.display = "none";
 }
+function confirmDelete(workspaceId) {
+    // Display a confirmation dialog
+    return confirm('Are you sure you want to delete this workspace?');
+    // If the user confirms, the anchor tag will proceed with its default action (i.e., navigating to the delete URL),
+    // otherwise, it will cancel the action.
+}
+
 </script>
 
 {% endblock %}

@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'plagiarism.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Plagiarism_Checker',
-        'USER' : 'postgres',
-        'PASSWORD': '631',
-        'HOST':'localhost'
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'Plagiarism checker', 
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
     }
 }
 
@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'profiles.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
