@@ -9,7 +9,7 @@ urlpatterns = [
     path('',views.index,name='index'),
     path('student_dashboard/', views.student, name = 'student'),
 
-    # path('create/',CreateWorkSpace.as_view(),name='create_class'),
+    path('add_assignment/',views.add_assignment,name='add_assignment'),
 
     path('create_class/', views.create_class,name='create_class'),
     path('delete/<uuid:workspace_id>/', views.delete_workspace, name='delete_workspace'),

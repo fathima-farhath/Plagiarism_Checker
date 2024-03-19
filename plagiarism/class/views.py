@@ -43,7 +43,9 @@ def open_workspace(request, workspace_id):
     single=workspace = WorkSpace.objects.filter(id=workspace_id)
     return render(request,'class/single.html',{'single_workspace':single})
 
-
+def add_assignment(request):
+    return render(request,'class/add_assignment.html')
+    
 def class_base(request):
     return render(request,'class/base.html')
 

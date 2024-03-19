@@ -1,0 +1,90 @@
+{% extends 'class/base.html' %}
+{% block title %} Add Assignment {% endblock %}
+ {% block css %}
+ <style>
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+
+    .col-6 {
+        padding: 30px;
+        background-color: #ebf4fb;
+        margin-top: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
+    h2 {
+        color: #1a73e8;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="date"],
+    input[type="file"],
+    input[type="submit"] {
+        width: calc(100% - 20px); /* Adjust the width to fit within the container */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 200px;
+        transition: background-color 0.3s ease; /* Add smooth transition */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0d47a1;
+    }
+ {% endblock%}
+
+{% block content %}
+<div class="row" style="margin: 0 auto;">
+    
+    <div class="col-3" ></div>
+    <div class="col-6" style="padding: 30px; background-color: #ebf4fb; margin-top:20px; border-radius: 10px; text-align: center; ">
+    
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="text-center">Add new Assignment</h2>
+            <div class="form-group">
+                <input type="text" id="title" name="title" placeholder="Enter the title">
+            </div>
+
+            <div class="form-group">
+                <textarea id="instructions" name="instructions" rows="4" cols="50" placeholder="Enter the instructions"></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="file" id="pdf" name="pdf" placeholder="Upload a file">
+            </div>
+
+            <div class="form-group">
+                <input type="date" id="due-date" name="due-date" placeholder="Due Date">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <div class="col-3" ></div>
+</div>
+
+{% endblock %}

@@ -122,7 +122,7 @@
             <div class="row">
               <div class="col-3">
                 <div class="" style="text-align:center; padding :8px;border-radius: 5px;background:rgb(5, 130, 238);color:white;">
-                  <a href="" style="color:white;"><i class="fas fa-plus"> Add new Assignment</i></a>
+                  <a href="{% url 'add_assignment' %}" style="color:white;"><i class="fas fa-plus"> Add new Assignment</i></a>
                 </div>
               </div>
             </div>
@@ -144,13 +144,13 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"> Leave Already ?</h5>
+          <h5 class="modal-title" id="exampleModalLabel"> Leave?</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <h4> Are You sure, You want to leave the WorkSpace </h4>
+          <h4> Are You sure, You want to leave the Class </h4>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
