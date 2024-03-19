@@ -1,4 +1,5 @@
 from django.db import models
+from profiles.models  import Teacher, Student, User
 import random
 import string
 import uuid
@@ -16,7 +17,7 @@ class WorkSpace(Time):
     stream = models.CharField(max_length=100, null=True)
     code = models.CharField(max_length=8, blank=True, null=True) # random 
     details = models.TextField() 
-    # teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL, null=True,related_name='room')
+    teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL, null=True,related_name='room')
     # student = models.ManyToManyField(Student,through='MemberShip', related_name='s_room')
 
 

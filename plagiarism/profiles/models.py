@@ -56,18 +56,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-#user profile    
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-#     name = models.CharField(max_length=200)
-#     age = models.PositiveIntegerField()
-#     semester = models.CharField(max_length=100)
-
-#     # Add any other fields you need here
-
-#     def __str__(self):
-#         return self.user.email
-    
 class Teacher(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True, related_name='teachers')
