@@ -10,6 +10,7 @@ urlpatterns = [
     path('student_dashboard/', views.student, name = 'student'),
 
     path('add_assignment/',views.add_assignment,name='add_assignment'),
+    path('edit_class/<uuid:workspace_id>/', views.edit_workspace,name='edit_class'),
 
     path('create_class/', views.create_class,name='create_class'),
     path('delete/<uuid:workspace_id>/', views.delete_workspace, name='delete_workspace'),

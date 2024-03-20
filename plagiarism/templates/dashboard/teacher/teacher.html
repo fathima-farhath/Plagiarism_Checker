@@ -71,7 +71,7 @@
 .delete_btn {
     position: absolute;
     top: 20px; 
-    left: 250px; 
+    left: 240px; 
     padding: 0;
     cursor: pointer;
     background: none;
@@ -130,7 +130,9 @@
             <span> Code : <strong>{{i.code}}</strong> </span><br>
             <a href="{% url 'open_workspace' i.id %}" class="view"> View Workspace </a>
             <button class="delete_btn " data-id="{{ workspace_item.id }}">
+                <a href ="{% url 'edit_class' i.id%}"><i class="far fa-edit icon"></i> </a>
                 <a href ="{% url 'delete_workspace' i.id %}" onclick="return confirmDelete('{{ i.id }}')"><i class="far fa-trash-alt icon"></i> </a><!-- Font Awesome trash icon -->
+                <!-- Font Awesome trash icon -->
             </button>
         </div>
        {% endfor %}
@@ -181,25 +183,3 @@ function confirmDelete(workspaceId) {
 </script>
 
 {% endblock %}
-
-
-     {% comment %} {% for message in messages %}
-            <div class="alert alert-primary" {% if message.tags %}
-                class="{{ message.tags }}"{% endif %}>{{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-    
-        {% endfor %} {% endcomment %}
-    <!--
-
-    {% for r in room %}
-    <div class="col-md-3 s_box m-4 ">
-            <h4>{{ r.name }}</h4>
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" alt="">
-            <span> Class : {{ r.unit }}</span><br>
-            <span> Code : {{ r.code }}</span><br>
-            <a href=""> View Class </a>
-    </div>
-    {% endfor %}

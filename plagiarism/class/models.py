@@ -29,3 +29,12 @@ class WorkSpace(Time):
         
     def __str__(self):
         return self.name 
+
+# class Membership(models.Model):
+#     room = models.ForeignKey(WorkSpace,on_delete=models.CASCADE, null=True,related_name='workspace')
+#     student = models.ForeignKey(Student,on_delete=models.CASCADE, null=True, related_name='members')
+#     is_join = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return f"{ self.room } | { self.student }"
+

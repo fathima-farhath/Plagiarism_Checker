@@ -76,41 +76,28 @@
 {% block content %} 
 <div class="row" style="margin-top:30px; margin:0;">
     <!-- Left side container for classes -->
-    <div class="col-md-8 m-4 class_box">
+    <div class="col-md-8 m-4 ">
         <div class="row" style="margin-top:10px; margin:0;">
+        {% comment %} {% for i in joined_workspaces %}
         <div class="col-md-5 m-4 class_box">
             <img src="{% static 'others/class.jpg' %}" alt="">
             <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span>IT-A</span>
+            <h4>{{i.name}}</h4>
+            <span>{{i.stream}}</span>
             <br>
             <a href="#"> View Workspace </a>
         </div>
+        {% endfor %} {% endcomment %}
+        
         <div class="col-md-5 m-4 class_box">
             <img src="{% static 'others/class.jpg' %}" alt="">
             <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>DSA</h4>
-            <span>IT-A</span>
+            <h4>Name</h4>
+            <span>IT A</span>
             <br>
-            <a href="#"> View Class </a>
+            <a href=""> View Workspace </a>
         </div>
-        <div class="row" style="margin-top:10px; margin:0;">
-            <div class="col-md-5 m-4 class_box">
-                <img src="{% static 'others/class.jpg' %}" alt="">
-                <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-                <h4>DSA</h4>
-                <span>IT-A</span>
-                <br>
-                <a href="#"> View Class </a>
-            </div>
-            <div class="col-md-5 m-4 class_box">
-                <img src="{% static 'others/class.jpg' %}" alt="">
-                <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-                <h4>DSA</h4>
-                <span>IT-A</span>
-                <br>
-                <a href="#"> View Class </a>
-            </div>
+       
             
         </div>
         <!-- More class boxes can be added dynamically -->
