@@ -74,6 +74,17 @@ def add_assignment(request, workspace_id):
     
     return render(request, 'class/add_assignment.html')
 
+def delete_assignment(request, assignment_id):
+    try:
+        assignment=Assignment.objects.get(id=assignment_id)
+        assignment.delete()
+        return redirect('open_workspace',workspace_id=assignment.workspace.id)
+    except:
+        raise Http404("No such assignment exists")
+
+
+def update_assignment(request,assignment_id):
+    assi
 def open_workspace(request, workspace_id):
     single_workspace = WorkSpace.objects.filter(id=workspace_id)
     single_workis = WorkSpace.objects.get(id=workspace_id)
