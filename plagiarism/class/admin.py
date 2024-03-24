@@ -3,4 +3,4 @@ from .models import *
 # Register your models here.
 
 admin.site.register(WorkSpace)
-# admin.site.register(Membership)
+admin.site.register(Assignment)

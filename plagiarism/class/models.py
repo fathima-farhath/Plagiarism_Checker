@@ -2,6 +2,7 @@ from django.db import models
 from profiles.models  import Teacher, Student, User
 import random
 import string
+from django.utils import timezone
 import uuid
 
 class Time(models.Model):
@@ -30,6 +31,20 @@ class WorkSpace(Time):
     def __str__(self):
         return self.name 
 
+
+
+class Assignment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workspace = models.ForeignKey(WorkSpace, on_delete=models.CASCADE, related_name='assignments')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='assignments')
+    title = models.CharField(max_length=200)
+    instructions = models.TextField()
+    points=models.IntegerField(null=True)
+    pdf = models.FileField(upload_to='assignments/')
+    due_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.title
 # class Membership(models.Model):
 #     room = models.ForeignKey(WorkSpace,on_delete=models.CASCADE, null=True,related_name='workspace')
 #     student = models.ForeignKey(Student,on_delete=models.CASCADE, null=True, related_name='members')
@@ -37,4 +52,3 @@ class WorkSpace(Time):
 
 #     def __str__(self):
 #         return f"{ self.room } | { self.student }"
-

@@ -38,12 +38,12 @@
 
 .box{
   border-radius: 20px;
-    padding: 5px 10px;
+    padding: 10px 10px;
     box-shadow: 1px 1px 2px 1px #dcd5d5;
 }
 .assignment-box {
   border-radius: 20px;
-  padding: 10px 10px 0px 10px;
+  padding: 10px 15px;
   box-shadow: 1px 1px 2px 1px #dcd5d5;
   margin-bottom: 20px;
 }
@@ -54,7 +54,6 @@
   padding: 10px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  border-bottom-left-radius: 20px;
 }
 
 .assignment-content {
@@ -123,26 +122,56 @@
                   <h5>No of joinees: 38</h5>
                   <a href="" class="text-right"> View All </a></br>
                   <div class="" style="text-align:center; padding :8px;border-radius: 5px;background:rgb(5, 130, 238);color:white;">
-                    <a href="{% url 'add_assignment' %}" style="color:white;"><i class="fas fa-plus"> Add new Assignment</i></a>
+                    <a href="{% url 'add_assignment' single_works.id %}" style="color:white;"><i class="fas fa-plus"> Add new Assignment</i></a>
                   </div>
                 </div>
               </div>
               <div class="col-9">
-                <div class="assignment-box assignment-expand">
+                <div class="assignment-box">
+                  <div class="assignment-header" style="display:flex;justify-content:space-between;">
+                      <h5>PPt preparation</h5>
+                      <p>Due Date: January 1, 2025</p>
+                  </div>
+                  <div class="assignment-content">
+                      <p class="assignment-details">The ppt has to submiited with this topic in it (hello,hi,ok)</p>
+                      <div style="display:flex;justify-content:space-between;">
+                        <div style="display:flex;"><p class="assignment-stats">Assigned to: 38</p>&nbsp&nbsp&nbsp
+                          <p class="assignment-stats">Turned in: 38</p>
+                        </div>
+                        <div style="display:flex;"><a href =""><i class="far fa-edit icon"></i> </a>&nbsp&nbsp&nbsp
+                          <a href =""><i class="far fa-trash-alt icon"></i> </a><!-- Font Awesome trash icon -->
+                        </div>
+                      </div>
+                  </div>
+                  <div class="assignment-file">
+                    <h6>Files:</h6>
+                    {% for file in assignment.files.all %}
+                      <div>
+                        <span>{{ file.name }}</span>
+                        <a href="{{ file.file.url }}" download><i class="fas fa-download"></i></a>
+                      </div>
+                    {% endfor %}
+                  </div>
+              </div>
+              {% for i in assgnmt %}
+                <div class="assignment-box">
                     <div class="assignment-header" style="display:flex;justify-content:space-between;">
-                        <h5>Design Thinking Presentation</h5>
-                        <p>Assignment Due Date: January 1, 2025</p>
+                        <h5>{{i.title}}</h5>
+                        <p>Due Date: {{i.due_date}}</p>
                     </div>
                     <div class="assignment-content">
-                        {% comment %} <a href="#" class="assignment-expand">View Details</a> {% endcomment %}
-                        <div class="assignment-expanded">
-                            <!-- Expanded content goes here -->      
-                            <p class="assignment-details">Some details about the assignment...</p>
-                            <p>Assigned:20</p>
-                            <p>Turned in: 15</p>
+                        <p class="assignment-details">{{i.instructions}}</p>
+                        <div style="display:flex;justify-content:space-between;">
+                          <div style="display:flex;"><p class="assignment-stats">Assigned to: {{i.points}}</p>&nbsp&nbsp&nbsp
+                            <p class="assignment-stats">Turned in: 38</p>
+                          </div>
+                          <div style="display:flex;"><a href =""><i class="far fa-edit icon"></i> </a>&nbsp&nbsp&nbsp
+                            <a href =""><i class="far fa-trash-alt icon"></i> </a><!-- Font Awesome trash icon -->
+                          </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             
               {% comment %} <div class="col-9">
@@ -216,12 +245,4 @@
       </div>
     </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $(".assignment-expand").click(function() {
-        $(this).next(".assignment-content").find(".assignment-expanded").slideToggle();
-    });
-});
-</script>
 {% endblock %}

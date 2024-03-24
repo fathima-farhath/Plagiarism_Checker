@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 # Create your views here.
 
 @login_required(login_url='login')
@@ -52,53 +53,44 @@ def edit_workspace(request,workspace_id):
         return render(request, 'class/edit_class.html', {'workspace': workspace}) 
 
 
-# @login_required(login_url='login')
-# def join(request):
-#     if request.method == 'POST':
-#         code = request.POST.get('code')
-#         try :
-#             check_code = WorkSpace.objects.get(code = code)
-#             user = request.user.students
-#             workspace = WorkSpace.objects.get(code=code)
-#             check = MemberShip.objects.filter(workspace=workspace, student = user )
-#             if check :
-#                 messages.success(request,'You are Already a member')
-#                 return redirect('single', id=check_code.id) 
-#             else:
-#                 member = MemberShip(workspace=workspace, student = user )
-#                 member.is_join = True 
-#                 member.save()
-#                 messages.success(request,'Welcome to The Class')
-#                 return redirect('single', id=workspace.id )  
-#         except WorkSpace.DoesNotExist:
-#             messages.warning(request,'Sorry The Code Didnot Match. Try Again')
-#             return redirect('student')
+@login_required(login_url='login')
+def add_assignment(request, workspace_id):
+    workspace = WorkSpace.objects.get(id=workspace_id)
+    
+    if request.method == 'POST':
+        title = request.POST['title']
+        instructions = request.POST['instructions']
+        pdf = request.FILES['pdf']
+        due_date = request.POST['due-date']
+        points=request.POST['points']
+        
+        # Fetch the current logged-in teacher
+        teacher = request.user.teachers  
+        
+        # Create the assignment and link it to the teacher and workspace
+        assignment=Assignment.objects.create(workspace=workspace, teacher=teacher, title=title, instructions=instructions, pdf=pdf, points=points, due_date=due_date)
+        assignment.save()
+        return redirect('open_workspace', workspace_id=workspace_id)
+    
+    return render(request, 'class/add_assignment.html')
 
+def open_workspace(request, workspace_id):
+    single_workspace = WorkSpace.objects.filter(id=workspace_id)
+    single_workis = WorkSpace.objects.get(id=workspace_id)
+    assignments = Assignment.objects.filter(workspace=single_workis)
+    # assignments = single_workspace.assignments.all()
+    return render(request,'class/single.html',{'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
+# def add_assignment(request):
+#     return render(request,'class/add_assignment.html')
 
-# @login_required(login_url='login')
-# def student(request):
-#     # Assuming each user can have only one student profile
-#     student = request.user.students
-
-#     if student:
-#         memberships = Membership.objects.filter(student=student)
-#         joined_workspaces = [membership.workspace for membership in memberships]
-#     else:
-#         joined_workspaces = []
-
-#     return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces})
+# def open_workspace(request, workspace_id):
+#     workspace = WorkSpace.objects.get(id=workspace_id)
+#     assignments = workspace.assignments.all()
+#     return render(request, 'workspace.html', {'workspace': workspace, 'assignments': assignments})
 
 def student(request):
     return render(request,'dashboard/student/student.html')
-
-
-def open_workspace(request, workspace_id):
-    single=workspace = WorkSpace.objects.filter(id=workspace_id)
-    return render(request,'class/single.html',{'single_workspace':single})
-
-def add_assignment(request):
-    return render(request,'class/add_assignment.html')
     
 def class_base(request):
     return render(request,'class/base.html')
