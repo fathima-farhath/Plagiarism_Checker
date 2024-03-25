@@ -1,0 +1,97 @@
+{% extends 'class/base.html' %}
+{% block title %} Update Assignment {% endblock %}
+ {% block css %}
+ <style>
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+
+    .col-6 {
+        padding: 30px;
+        background-color: #ebf4fb;
+        margin-top: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
+    h2 {
+        color: #1a73e8;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+{% comment %} 
+    label {
+        font-weight: bold;
+    } {% endcomment %}
+
+    input[type="text"],
+    textarea,
+    input[type="date"],
+    input[type="file"],
+    input[type="submit"] {
+        width: calc(100% - 20px); /* Adjust the width to fit within the container */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 200px;
+        transition: background-color 0.3s ease; /* Add smooth transition */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0d47a1;
+    }
+ {% endblock%}
+
+{% block content %}
+<div class="row" style="margin: 0 auto;">
+    
+    <div class="col-3" ></div>
+    <div class="col-6" style="padding: 30px; background-color: #ebf4fb; margin-top:20px; border-radius: 10px; text-align: center; ">
+    
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="text-center">Update Assignment</h2>
+            <div class="form-group">
+                <input type="text" id="title" name="title" placeholder="Enter the title" required value="{{assgnmt.title}}">
+            </div>
+        
+            <div class="form-group">
+                <textarea id="instructions" name="instructions" rows="4" cols="50"  placeholder="Enter the descriptions" required>{{ assgnmt.instructions }}</textarea>
+            </div>
+        
+            <div class="form-group">
+                <label for="pdf">Current File: {{ assgnmt.pdf.name }}</label><br>
+                <input type="file" id="pdf" name="pdf" style="display: none;">
+                <button type="button" onclick="document.getElementById('pdf').click()">Change File</button>
+            </div>
+        
+            <div class="form-group">
+                <input type="number" id="points" name="points" value="{{assgnmt.points}}" placeholder="Enter the points" required size="50">
+            </div>
+        
+            <div class="form-group">
+                Due date:<input type="datetime-local" id="due-date" name="due-date" placeholder="Due Date" size="50" value="{{ assgnmt.due_date|date:'Y-m-d' }}T{{ assgnmt.due_date|time:'H:i' }}">
+            </div>
+        
+            <div class="form-group">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+        
+    </div>
+    <div class="col-3" ></div>
+</div>
+
+{% endblock %}
