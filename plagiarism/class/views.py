@@ -3,6 +3,8 @@ from . models import *
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import Http404
+import os
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 # Create your views here.
@@ -70,35 +72,7 @@ def add_assignment(request, workspace_id):
         return redirect('open_workspace', workspace_id=workspace_id)
     
     return render(request, 'class/add_assignment.html')
-
-import os
-from django.conf import settings
-from django.http import Http404
-
-# def delete_assignment(request, assignment_id):
-#     try:
-#         assignment = Assignment.objects.get(id=assignment_id)
-        
-#         # Check if assignment has an associated PDF file
-#         if assignment.pdf:
-#             # Construct the file path relative to the MEDIA_ROOT
-#             file_path = os.path.join(settings.MEDIA_ROOT, str(assignment.pdf))
-            
-#             # Check if the file exists
-#             if os.path.exists(file_path):
-#                 # Delete the file from the filesystem
-#                 os.remove(file_path)
-#             else:
-#                 raise FileNotFoundError("File does not exist at path: {}".format(file_path))
-        
-#         # Delete the assignment record
-#         assignment.delete()
-        
-#         # Redirect to the workspace page
-#         return redirect('open_workspace', workspace_id=assignment.workspace.id)
-#     except Assignment.DoesNotExist:
-#         raise Http404("No such assignment exists")
-  
+ 
 
 def delete_assignment(request, assignment_id):
     try:
@@ -118,11 +92,13 @@ def delete_assignment(request, assignment_id):
 def update_assignment(request,assignment_id):
     assignment=Assignment.objects.get(id=assignment_id)
     if request.method=='POST':
-        title = request.POST['title']
-        instructions = request.POST['instructions']
-        pdf = request.FILES['pdf']
-        due_date = request.POST['due-date']
-        points=request.POST['points']
+        assignment.title = request.POST['title']
+        assignment.instructions = request.POST['instructions']
+        # assignment.pdf = request.FILES['pdf']
+        assignment.due_date = request.POST['due-date']
+        assignment.points=request.POST['points']
+        if 'pdf' in request.FILES:
+            assignment.pdf = request.FILES['pdf']
         assignment.save()
         return redirect('open_workspace', workspace_id=assignment.workspace_id)
     else:
