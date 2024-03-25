@@ -33,14 +33,14 @@ class WorkSpace(Time):
 
 
 
-class Assignment(models.Model):
+class Assignment(Time):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     workspace = models.ForeignKey(WorkSpace, on_delete=models.CASCADE, related_name='assignments')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='assignments')
     title = models.CharField(max_length=200)
     instructions = models.TextField()
     points=models.IntegerField(null=True)
-    pdf = models.FileField(upload_to='assignments/')
+    pdf = models.FileField(upload_to='assignments/',null=True)
     due_date = models.DateTimeField()
 
     def __str__(self):
