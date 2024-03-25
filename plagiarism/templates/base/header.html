@@ -73,7 +73,7 @@
       <div class="modal-body">
         
           <form action="" method="POST">
-          
+            {% csrf_token %}
               <div class="form-group">
                 
                 <input type="text" class="form-control" id="exampleInputEmail1" name='code' aria-describedby="emailHelp" placeholder="Enter the Code">

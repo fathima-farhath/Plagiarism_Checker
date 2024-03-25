@@ -9,7 +9,10 @@ urlpatterns = [
     path('',views.index,name='index'),
     path('student_dashboard/', views.student, name = 'student'),
 
-    path('add_assignment/',views.add_assignment,name='add_assignment'),
+    path('add_assignment/<uuid:workspace_id>/', views.add_assignment, name='add_assignment'),
+    path('delete/<uuid:assignment_id>/',views.delete_assignment,name='delete_assignment'),
+    path('update/<uuid:assignment_id>/',views.update_assignment,name='update_assignment'),
+    path('edit_class/<uuid:workspace_id>/', views.edit_workspace,name='edit_class'),
 
     path('create_class/', views.create_class,name='create_class'),
     path('delete/<uuid:workspace_id>/', views.delete_workspace, name='delete_workspace'),

@@ -1,5 +1,5 @@
 {% extends 'class/base.html' %}
-{% block title %} Add Assignment {% endblock %}
+{% block title %} Update Assignment {% endblock %}
  {% block css %}
  <style>
     .row {
@@ -23,10 +23,10 @@
     .form-group {
         margin-bottom: 20px;
     }
-
+{% comment %} 
     label {
         font-weight: bold;
-    }
+    } {% endcomment %}
 
     input[type="text"],
     textarea,
@@ -62,25 +62,27 @@
     
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2 class="text-center">Add new Assignment</h2>
+            <h2 class="text-center">Update Assignment</h2>
             <div class="form-group">
-                <input type="text" id="title" name="title" placeholder="Enter the title" required>
+                <input type="text" id="title" name="title" placeholder="Enter the title" required value="{{assgnmt.title}}">
             </div>
         
             <div class="form-group">
-                <textarea id="instructions" name="instructions" rows="4" cols="50" placeholder="Enter the descriptions"></textarea>
+                <textarea id="instructions" name="instructions" rows="4" cols="50"  placeholder="Enter the descriptions" required>{{ assgnmt.instructions }}</textarea>
             </div>
         
             <div class="form-group">
-                <input type="file" id="pdf" name="pdf" placeholder="Upload a file" required>
+                <label for="pdf">Current File: {{ assgnmt.pdf.name }}</label><br>
+                <input type="file" id="pdf" name="pdf" style="display: none;">
+                <button type="button" onclick="document.getElementById('pdf').click()">Change File</button>
             </div>
         
             <div class="form-group">
-                <input type="number" id="points" name="points" placeholder="Enter the points" required size="50">
+                <input type="number" id="points" name="points" value="{{assgnmt.points}}" placeholder="Enter the points" required size="50">
             </div>
         
             <div class="form-group">
-                Due date:<input type="datetime-local" id="due-date" name="due-date" placeholder="Due Date" size="50" required>
+                Due date:<input type="datetime-local" id="due-date" name="due-date" placeholder="Due Date" size="50" value="{{ assgnmt.due_date|date:'Y-m-d' }}T{{ assgnmt.due_date|time:'H:i' }}">
             </div>
         
             <div class="form-group">

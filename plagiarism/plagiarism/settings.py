@@ -82,7 +82,8 @@ DATABASES = {
         'HOST': '127.0.0.1', 
         'NAME': 'Plagiarism_Checker', 
         'USER': 'postgres',
-        'PASSWORD': '631'
+        'PASSWORD': '631',
+        'HOST': 'localhost'
     }
 }
 
