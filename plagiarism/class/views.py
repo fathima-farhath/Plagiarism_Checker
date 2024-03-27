@@ -135,6 +135,24 @@ def join(request):
             return redirect('student')
     return redirect('.')
 
+def submit_assignment(request,assignment_id):
+    assignment=Assignment.objects.filter(id=assignment_id)
+    # if request.method=='POST':
+    #     submitted_file=pdf = request.FILES['pdfdoc']
+    #     assignment=Assignment.objects.get(id=assignment_id)
+    #     workspace_id = assignment.workspace.id
+    #     print(assignment)
+    return render(request,'class/add_sub.html', {'submission':assignment})
+
+
+
+
+
+
+
+
+
+
 
 
 @login_required(login_url='login')   

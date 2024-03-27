@@ -54,3 +54,13 @@ class Assignment(Time):
     def __str__(self):
         return self.title
 
+class Submission(Time):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='submissions')
+    submitted_file = models.FileField(upload_to='submissions/')
+    grade_granded=models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.assignment
+

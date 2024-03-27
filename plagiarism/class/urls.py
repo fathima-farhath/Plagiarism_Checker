@@ -22,5 +22,6 @@ urlpatterns = [
     path('recieve_mail/',views.recieve_mail,name='recieve_email'),
     path('teacher_dashboard/',views.teacher, name='teacher'),
     path('join_workspace/',views.join,name='join'),
+    path('submit_work/<uuid:assignment_id>/',views.submit_assignment,name='submit_assignment'),
     path('student_list/<uuid:workspace_id>/',views.people,name='people'),
 ]
