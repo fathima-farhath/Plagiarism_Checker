@@ -108,8 +108,9 @@ def update_assignment(request,assignment_id):
 def open_workspace(request, workspace_id):
     single_workspace = WorkSpace.objects.filter(id=workspace_id)
     single_workis = WorkSpace.objects.get(id=workspace_id)
+    memberships = Membership.objects.filter(workspace=single_workis).count()
     assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
-    return render(request,'class/single.html',{'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
+    return render(request,'class/single.html',{'joinees':memberships,'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
 
 @login_required(login_url='login')   
@@ -144,12 +145,16 @@ def student(request):
     joined_workspaces = WorkSpace.objects.filter(membership__student=student).order_by('-membership__joining_date')
     return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces})  
 
+def people(request,workspace_id):
+    workspace = WorkSpace.objects.get(id=workspace_id)
+    memberships = Membership.objects.filter(workspace=workspace)
+    joined_students_names = [membership.student.name for membership in memberships]
+    return render(request,'class/people.html',{'joined_students_names': joined_students_names}) 
+
 def class_base(request):
     return render(request,'class/base.html')
 
 
-# def join(request):
-#     return render(request,'class/single.html')
 
 
 def index(request):
@@ -167,5 +172,3 @@ def recieve_mail(request):
     return render(request,'dashboard/student/email.html')
 
   
-def people(request):
-    return render(request,'class/people.html')

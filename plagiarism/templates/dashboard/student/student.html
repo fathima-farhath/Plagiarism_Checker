@@ -96,7 +96,7 @@
             <h4>{{i.name}}</h4>
             <span>{{i.stream}}</span>
             <br>
-            <a href="#"> View Workspace </a>
+            <a href="{% url 'open_workspace' i.id %}" class="view"> View Workspace </a>
         </div>
         {% endfor %} 
         <!-- More class boxes can be added dynamically -->
