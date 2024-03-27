@@ -7,6 +7,8 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 # Create your views here.
 
 @login_required(login_url='login')
@@ -137,12 +139,24 @@ def join(request):
 
 def submit_assignment(request,assignment_id):
     assignment=Assignment.objects.filter(id=assignment_id)
-    # if request.method=='POST':
-    #     submitted_file=pdf = request.FILES['pdfdoc']
-    #     assignment=Assignment.objects.get(id=assignment_id)
-    #     workspace_id = assignment.workspace.id
-    #     print(assignment)
-    return render(request,'class/add_sub.html', {'submission':assignment})
+    assignments=Assignment.objects.get(id=assignment_id)
+    student = request.user.students
+
+    existing_submission = Submission.objects.filter(assignment=assignments, student=student).exists()
+
+    if request.method == 'POST':
+        # If submission already exists, redirect or show an error message
+        if existing_submission:
+            messages.success(request,' You have already submitted this assignment !!')
+            # return HttpResponse("You have already submitted this assignment", status=400)
+            return redirect('.')    
+        pdf = request.FILES['pdfdoc']
+        sub=Submission.objects.create(submitted_file=pdf,assignment=assignments,student=student)
+        sub.save()
+        messages.success(request,'Submission successful assignment !!')
+        return redirect('.')    
+    submissions = Submission.objects.filter(assignment=assignments, student=student)
+    return render(request,'class/add_sub.html', {'assignment': assignment, 'submissions': submissions})
 
 
 
