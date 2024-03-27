@@ -75,10 +75,21 @@
 
 {% block content %} 
 <div class="row" style="margin-top:30px; margin:0;">
+    <div class="messages" style="position: absolute; top:12%; left:70%; z-index: 1;" >
+        {% for message in messages %}
+            <div class="alert alert-danger" {% if message.tags %}
+                class="{{ message.tags }}"{% endif %}>{{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+    
+        {% endfor %}
+    </div>
     <!-- Left side container for classes -->
     <div class="col-md-8 m-4 ">
         <div class="row" style="margin-top:10px; margin:0;">
-        {% comment %} {% for i in joined_workspaces %}
+         {% for i in joined_workspaces %}
         <div class="col-md-5 m-4 class_box">
             <img src="{% static 'others/class.jpg' %}" alt="">
             <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
@@ -87,19 +98,7 @@
             <br>
             <a href="#"> View Workspace </a>
         </div>
-        {% endfor %} {% endcomment %}
-        
-        <div class="col-md-5 m-4 class_box">
-            <img src="{% static 'others/class.jpg' %}" alt="">
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
-            <h4>Name</h4>
-            <span>IT A</span>
-            <br>
-            <a href=""> View Workspace </a>
-        </div>
-       
-            
-        </div>
+        {% endfor %} 
         <!-- More class boxes can be added dynamically -->
     </div>
     
@@ -145,26 +144,5 @@
 
 
 
-  {% comment %} <div class="messages" style="position: absolute; top:12%; left:70%; z-index: 1;" >
-        {% for message in messages %}
-            <div class="alert alert-primary" {% if message.tags %}
-                class="{{ message.tags }}"{% endif %}>{{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-    
-        {% endfor %}
-    </div> {% endcomment %}
+ 
 
-<!--
-    {% for r in room %}
-    <div class="col-md-3 s_box m-4 ">
-            <h4>{{ r.name }}</h4>
-            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" alt="">
-            <span>{{ r.name }}</span><br>
-            <a href="{% url 'single' r.id %}"> view Class </a>
-    </div>
-    {% endfor %} -->
-
-<!-- New design -->

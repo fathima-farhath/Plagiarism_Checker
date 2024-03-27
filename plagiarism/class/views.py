@@ -19,7 +19,7 @@ def create_class(request):
         teacher = request.user.teachers
         workspace = WorkSpace.objects.create(name=name, details=detail, stream=stream, teacher=teacher)
         workspace.save()
-        messages.success(request,' Classroom Has Been Created !!')
+        messages.success(request,' workspace Has Been Created !!')
         return  redirect('teacher') 
     else:
         return render(request,'class/create_class.html') 
@@ -37,6 +37,7 @@ def delete_workspace(request, workspace_id):
     try:
         workspace = WorkSpace.objects.get(id=workspace_id)
         workspace.delete()
+        messages.succes(request,'Workspace deleted Successfully')
         return redirect('teacher')
     except WorkSpace.DoesNotExist:
         raise Http404("Workspace does not exist")
@@ -110,23 +111,45 @@ def open_workspace(request, workspace_id):
     assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
     return render(request,'class/single.html',{'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
-# def add_assignment(request):
-#     return render(request,'class/add_assignment.html')
 
-# def open_workspace(request, workspace_id):
-#     workspace = WorkSpace.objects.get(id=workspace_id)
-#     assignments = workspace.assignments.all()
-#     return render(request, 'workspace.html', {'workspace': workspace, 'assignments': assignments})
+@login_required(login_url='login')   
+def join(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        try:
+            workspace = WorkSpace.objects.get(code=code)
+            print(workspace)
+            student = request.user.students
+            print(student)
+            # Check if the student is already a member of the workspace
+            if not Membership.objects.filter(student=student, workspace=workspace).exists():
+                Membership.objects.create(student=student, workspace=workspace)
+                messages.success(request,'You have successfully joined the workspace!!')
+                return redirect('student')
+            else:
+                messages.success(request,'You have already joined the Workspace!!')
+                return redirect('student')  # Change 'student_dashboard' to the URL name of your student dashboard
+        except WorkSpace.DoesNotExist:
+            messages.success(request,'The code is invalid.Please enter the correct code!!')
+            return redirect('student')
+    return redirect('.')
 
+
+
+@login_required(login_url='login')   
 def student(request):
-    return render(request,'dashboard/student/student.html')
-    
+    # Fetch the current logged-in student
+    student = request.user.students
+    # Get the workspaces joined by the student
+    joined_workspaces = WorkSpace.objects.filter(membership__student=student).order_by('-membership__joining_date')
+    return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces})  
+
 def class_base(request):
     return render(request,'class/base.html')
 
 
-def join(request):
-    return render(request,'class/single.html')
+# def join(request):
+#     return render(request,'class/single.html')
 
 
 def index(request):

@@ -19,8 +19,7 @@ class WorkSpace(Time):
     code = models.CharField(max_length=8, blank=True, null=True) # random 
     details = models.TextField() 
     teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL, null=True,related_name='room')
-    # student = models.ManyToManyField(Student,through='MemberShip', related_name='s_room')
-
+    # students = models.ManyToManyField(Student, through='Membership', related_name='workspaces')
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -32,6 +31,15 @@ class WorkSpace(Time):
         return self.name 
 
 
+
+
+
+class Membership(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    workspace = models.ForeignKey(WorkSpace, on_delete=models.CASCADE)
+    joining_date=models.DateTimeField(auto_now_add=True,null=True)
+    class Meta:
+        unique_together = ['student', 'workspace']
 
 class Assignment(Time):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -45,10 +53,4 @@ class Assignment(Time):
 
     def __str__(self):
         return self.title
-# class Membership(models.Model):
-#     room = models.ForeignKey(WorkSpace,on_delete=models.CASCADE, null=True,related_name='workspace')
-#     student = models.ForeignKey(Student,on_delete=models.CASCADE, null=True, related_name='members')
-#     is_join = models.BooleanField(default=False)
 
-#     def __str__(self):
-#         return f"{ self.room } | { self.student }"

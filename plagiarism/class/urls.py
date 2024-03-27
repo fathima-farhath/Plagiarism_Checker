@@ -21,6 +21,6 @@ urlpatterns = [
     path('send_mail/', views.send_mail, name = 'send_mail'),
     path('recieve_mail/',views.recieve_mail,name='recieve_email'),
     path('teacher_dashboard/',views.teacher, name='teacher'),
-    
+    path('join_workspace/',views.join,name='join'),
     path('student_list/',views.people,name='people'),
 ]
