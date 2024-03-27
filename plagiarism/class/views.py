@@ -159,7 +159,17 @@ def submit_assignment(request,assignment_id):
     return render(request,'class/add_sub.html', {'assignment': assignment, 'submissions': submissions})
 
 
-
+def update_sub(request,assignment_id):
+    assignment=Assignment.objects.filter(id=assignment_id)
+    assignments=Assignment.objects.get(id=assignment_id)
+    student = request.user.students
+    submissions = Submission.objects.filter(assignment=assignments, student=student)
+    if request.method == 'POST':
+        sub = Submission.objects.get(assignment=assignments, student=student)
+        sub.submitted_file=request.FILES['pdfdoc']
+        sub.save()
+        messages.success(request,"Submission updated successfully")
+    return render(request,'class/update_sub.html',{'assignment': assignment, 'submissions': submissions})
 
 
 
