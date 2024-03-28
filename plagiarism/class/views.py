@@ -153,7 +153,7 @@ def submit_assignment(request,assignment_id):
         pdf = request.FILES['pdfdoc']
         sub=Submission.objects.create(submitted_file=pdf,assignment=assignments,student=student)
         sub.save()
-        messages.success(request,'Submission successful assignment !!')
+        messages.success(request,'Submission successful')
         return redirect('.')    
     submissions = Submission.objects.filter(assignment=assignments, student=student)
     return render(request,'class/add_sub.html', {'assignment': assignment, 'submissions': submissions})
