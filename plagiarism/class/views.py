@@ -36,15 +36,6 @@ def teacher(request):
     return render(request,'dashboard/teacher/teacher.html',{'workspace': workspaces}) 
 
 
-def delete_workspace(request, workspace_id):
-    try:
-        workspace = WorkSpace.objects.get(id=workspace_id)
-        workspace.delete()
-        messages.succes(request,'Workspace deleted Successfully')
-        return redirect('teacher')
-    except WorkSpace.DoesNotExist:
-        raise Http404("Workspace does not exist")
-
 @login_required(login_url='login')   
 def edit_workspace(request,workspace_id):
     workspace = WorkSpace.objects.get(id=workspace_id)
@@ -58,6 +49,14 @@ def edit_workspace(request,workspace_id):
     else:
         return render(request, 'class/edit_class.html', {'workspace': workspace}) 
 
+def delete_workspace(request, workspace_id):
+    try:
+        workspace = WorkSpace.objects.get(id=workspace_id)
+        workspace.delete()
+        messages.succes(request,'Workspace deleted Successfully')
+        return redirect('teacher')
+    except WorkSpace.DoesNotExist:
+        raise Http404("Workspace does not exist")
 
 @login_required(login_url='login')
 def add_assignment(request, workspace_id):
@@ -77,7 +76,6 @@ def add_assignment(request, workspace_id):
     
     return render(request, 'class/add_assignment.html')
  
-
 def delete_assignment(request, assignment_id):
     try:
         assignment=Assignment.objects.get(id=assignment_id)
