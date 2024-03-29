@@ -4,9 +4,12 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import Http404
 import os
+from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 # Create your views here.
 
 @login_required(login_url='login')
@@ -19,7 +22,7 @@ def create_class(request):
         teacher = request.user.teachers
         workspace = WorkSpace.objects.create(name=name, details=detail, stream=stream, teacher=teacher)
         workspace.save()
-        messages.success(request,' Classroom Has Been Created !!')
+        messages.success(request,' workspace Has Been Created !!')
         return  redirect('teacher') 
     else:
         return render(request,'class/create_class.html') 
@@ -37,6 +40,7 @@ def delete_workspace(request, workspace_id):
     try:
         workspace = WorkSpace.objects.get(id=workspace_id)
         workspace.delete()
+        messages.succes(request,'Workspace deleted Successfully')
         return redirect('teacher')
     except WorkSpace.DoesNotExist:
         raise Http404("Workspace does not exist")
@@ -104,30 +108,113 @@ def update_assignment(request,assignment_id):
     else:
         return render(request,'class/update_assignment.html',{'assgnmt':assignment})
 
-def open_workspace(request, workspace_id):
-    single_workspace = WorkSpace.objects.filter(id=workspace_id)
-    single_workis = WorkSpace.objects.get(id=workspace_id)
-    assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
-    return render(request,'class/single.html',{'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
-# def add_assignment(request):
-#     return render(request,'class/add_assignment.html')
 
-# def open_workspace(request, workspace_id):
-#     workspace = WorkSpace.objects.get(id=workspace_id)
-#     assignments = workspace.assignments.all()
-#     return render(request, 'workspace.html', {'workspace': workspace, 'assignments': assignments})
+@login_required(login_url='login')   
+def join(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        try:
+            workspace = WorkSpace.objects.get(code=code)
+            print(workspace)
+            student = request.user.students
+            print(student)
+            # Check if the student is already a member of the workspace
+            if not Membership.objects.filter(student=student, workspace=workspace).exists():
+                Membership.objects.create(student=student, workspace=workspace)
+                messages.success(request,'You have successfully joined the workspace!!')
+                return redirect('student')
+            else:
+                messages.success(request,'You have already joined the Workspace!!')
+                return redirect('student')  # Change 'student_dashboard' to the URL name of your student dashboard
+        except WorkSpace.DoesNotExist:
+            messages.success(request,'The code is invalid.Please enter the correct code!!')
+            return redirect('student')
+    return redirect('.')
 
+def submit_assignment(request,assignment_id):
+    assignment=Assignment.objects.filter(id=assignment_id)
+    assignments=Assignment.objects.get(id=assignment_id)
+    student = request.user.students
+
+    existing_submission = Submission.objects.filter(assignment=assignments, student=student).exists()
+
+    if request.method == 'POST':
+        # If submission already exists, redirect or show an error message
+        if existing_submission:
+            messages.success(request,' You have already submitted this assignment !!')
+            # return HttpResponse("You have already submitted this assignment", status=400)
+            return redirect('.')    
+        pdf = request.FILES['pdfdoc']
+        sub=Submission.objects.create(submitted_file=pdf,assignment=assignments,student=student)
+        sub.save()
+        messages.success(request,'Submission successful')
+        return redirect('.')    
+    submissions = Submission.objects.filter(assignment=assignments, student=student)
+    return render(request,'class/add_sub.html', {'assignment': assignment, 'submissions': submissions})
+
+
+def update_sub(request,assignment_id):
+    assignment=Assignment.objects.filter(id=assignment_id)
+    assignments=Assignment.objects.get(id=assignment_id)
+    student = request.user.students
+    submissions = Submission.objects.filter(assignment=assignments, student=student)
+    if request.method == 'POST':
+        sub = Submission.objects.get(assignment=assignments, student=student)
+        sub.submitted_file=request.FILES['pdfdoc']
+        sub.save()
+        messages.success(request,"Submission updated successfully")
+    return render(request,'class/update_sub.html',{'assignment': assignment, 'submissions': submissions})
+
+
+@login_required(login_url='login')   
 def student(request):
-    return render(request,'dashboard/student/student.html')
-    
+    # Fetch the current logged-in student
+    student = request.user.students
+    # Get the workspaces joined by the student
+    joined_workspaces = WorkSpace.objects.filter(membership__student=student).order_by('-membership__joining_date')
+    return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces})  
+
+def people(request,workspace_id):
+    workspace = WorkSpace.objects.get(id=workspace_id)
+    memberships = Membership.objects.filter(workspace=workspace)
+    joined_students_names = [membership.student.name for membership in memberships]
+    return render(request,'class/people.html',{'joined_students_names': joined_students_names}) 
+
 def class_base(request):
     return render(request,'class/base.html')
 
+def open_workspace(request, workspace_id):
+    single_workspace = WorkSpace.objects.filter(id=workspace_id)
+    single_workis = WorkSpace.objects.get(id=workspace_id)
+    memberships = Membership.objects.filter(workspace=single_workis).count()
+    assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
+    return render(request,'class/single.html',{'joinees':memberships,'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
-def join(request):
-    return render(request,'class/single.html')
-
+def view_sub(request, assignment_id):
+    assignment = Assignment.objects.filter(id=assignment_id)
+    assignments = Assignment.objects.get(id=assignment_id)
+    workspace = assignments.workspace
+    all_s= Membership.objects.filter(workspace=workspace)
+    print(all_s)
+    assigned = Membership.objects.filter(workspace=workspace).count()
+    submission = Submission.objects.filter(assignment=assignments)
+    submitted = submission.count()
+    assignment_date = assignments.due_date
+    all_students = Student.objects.filter(membership__workspace=workspace)
+    print(all_students)
+    not_submitted_students = []
+    for student in all_students:
+        if not submission.filter(student=student).exists():
+            not_submitted_students.append(student)
+    return render(request, 'class/view_submissions.html', {
+        'not_submitted_students': not_submitted_students,
+        'assignment_date': assignment_date,
+        'assignment': assignment,
+        'joinees': assigned,
+        'submitted': submitted,
+        'submissions': submission
+        })
 
 def index(request):
     return render(request,'index.html')
@@ -142,5 +229,3 @@ def recieve_mail(request):
     return render(request,'dashboard/student/email.html')
 
   
-def people(request):
-    return render(request,'class/people.html')

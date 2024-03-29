@@ -61,7 +61,7 @@ class TeacherRegister(View):
             user.save()
         user_obj = Teacher(user=user,name=name)
         user_obj.save()
-        messages.success(request, 'Thanks for Singing !!, Login To continue')
+        messages.success(request, 'Thanks for Signing up!!, Login To continue')
         return redirect ('login')
 
 
@@ -99,7 +99,7 @@ class StudentRegister(View):
             user.save()
         user_obj = Student(user=user, photo=photo,name = name )
         user_obj.save()
-        messages.success(request,'Thanks for Singing !!, Login to Continue')
+        messages.success(request,'Thanks for Signing up!!, Login To continue')
         return redirect ('login')
     
 class LoginView(View):

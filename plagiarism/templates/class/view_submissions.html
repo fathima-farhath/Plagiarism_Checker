@@ -1,0 +1,131 @@
+{% extends 'class/base.html' %}
+{% load static %}
+{% block class_link %}
+{% endblock %}
+{% load tz %}
+{% block css %}
+.title{
+    color:#007bff;
+    margin-left:10px;
+}
+.submission-icon {
+    font-size: 35px;  
+    color: #007bff;
+  }
+.submission{
+    width:2px;
+    height:70px;  
+    background: #007bff;
+  }
+  .bg{
+    background:#6495ED;
+    color:white;
+  }
+  .table{
+    margin-bottom:100px;
+  }
+  .assignment-box {
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-shadow: 1px 1px 2px 1px #dcd5d5;
+    margin-bottom: 20px;
+  }
+{% endblock %}
+{% block content %}
+{% for i in assignment %}
+<div class="row  mt-3 ">
+    <div class="col-11">
+        <div class="assignment-header" style="display:flex;justify-content:space-between;">
+            <div class="" style="display:flex;">
+                <i class="fas fa-file-alt fa-5x submission-icon"></i>&nbsp&nbsp
+                <h2 class="title">{{i.title}}</h2>
+            </div>
+            <p>Due Date: {{i.due_date}}</p>
+        </div>
+        <p>Total grade: {{i.points}}</p>
+            <hr style="background:#007bff;">
+        <div>
+        <p>{{i.instructions}}</p>
+        </div>
+</div>
+</div>
+
+<div class="row  mt-3 ">
+    <div class="col-3">
+        <div style="display:flex;justify-content:space-around;">
+            <div style="text-align:center;">
+                <h3>{{joinees}}</h3>
+                <p>Assigned</p>
+            </div>
+            <div class="submission"></div>
+            <div style="text-align:center;">
+                <h3>{{submitted}}</h3>
+                <p>Submitted</p>
+            </div>
+    </div>
+    </div>
+</div>
+
+
+<div class="row mt-3">
+    <div class="col-12">
+        <h4>All submissions</h4>
+        <table class="table table-striped table-hover">
+            <thead class="bg" align="center">    
+                <tr>
+                    <th>Name</th>
+                    <th>mail id</th>
+                    <th>Submission</th>
+                    <th>Status</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody align="center">
+                {% for j in submissions %}
+                <tr>
+                    <td>{{j.student.name}}</td>
+                    <td>{{j.student}}</td>
+                    <td><a href="{{j.submitted_file.url}}">{{j.submitted_file|cut:'submissions/'}}</a></td>
+                    {% with j.updated_at|timezone:"UTC" as submission_time %}                    
+                    {% if submission_time  > assignment_date %}
+                    <td style="color:red;">Done late({{submission_time}})</td>
+                    {% else %}
+                    <td style="color:green;">On time({{submission_time}})</td>
+                    {% endif %}
+                    {% endwith %}
+                    <td>_/{{i.points}}</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+<div>
+    {% endfor %}
+    <div class="row mt-3">
+        <div class="col-12">
+            <h4>Not turned in</h4>
+            <table class="table table-striped table-hover">
+                <thead class="bg" align="center">    
+                    <tr>
+                        <th>Name</th>
+                        <th>mail id</th>
+                        <th>Status</th>
+                       
+                    </tr>
+                </thead>
+                <tbody align="center">
+                                     
+                    {% for student in not_submitted_students %}
+                    <tr>
+                        <td>{{student.name}}</td>
+                        <td>{{student}}</td>
+                        <td style="color:red;">Not submitted</td>
+                        
+                    </tr>  
+                    {% endfor %}
+            </table>
+        </div>
+    <div>
+
+
+
+{% endblock %}
