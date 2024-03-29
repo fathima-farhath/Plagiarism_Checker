@@ -24,5 +24,6 @@ urlpatterns = [
     path('join_workspace/',views.join,name='join'),
     path('submit_work/<uuid:assignment_id>/',views.submit_assignment,name='submit_assignment'),
     path('update_work/<uuid:assignment_id>/',views.update_sub,name='update_sub'),
+    path('view_sub/<uuid:assignment_id>/',views.view_sub,name='view_sub'),
     path('student_list/<uuid:workspace_id>/',views.people,name='people'),
 ]

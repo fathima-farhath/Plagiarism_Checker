@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http import Http404
 import os
+from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -107,12 +108,6 @@ def update_assignment(request,assignment_id):
     else:
         return render(request,'class/update_assignment.html',{'assgnmt':assignment})
 
-def open_workspace(request, workspace_id):
-    single_workspace = WorkSpace.objects.filter(id=workspace_id)
-    single_workis = WorkSpace.objects.get(id=workspace_id)
-    memberships = Membership.objects.filter(workspace=single_workis).count()
-    assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
-    return render(request,'class/single.html',{'joinees':memberships,'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
 
 @login_required(login_url='login')   
@@ -172,13 +167,6 @@ def update_sub(request,assignment_id):
     return render(request,'class/update_sub.html',{'assignment': assignment, 'submissions': submissions})
 
 
-
-
-
-
-
-
-
 @login_required(login_url='login')   
 def student(request):
     # Fetch the current logged-in student
@@ -196,8 +184,37 @@ def people(request,workspace_id):
 def class_base(request):
     return render(request,'class/base.html')
 
+def open_workspace(request, workspace_id):
+    single_workspace = WorkSpace.objects.filter(id=workspace_id)
+    single_workis = WorkSpace.objects.get(id=workspace_id)
+    memberships = Membership.objects.filter(workspace=single_workis).count()
+    assignments = Assignment.objects.filter(workspace=single_workis).order_by('-created_at')
+    return render(request,'class/single.html',{'joinees':memberships,'single_workspace':single_workspace,'single_works':single_workis,'assgnmt':assignments})
 
-
+def view_sub(request, assignment_id):
+    assignment = Assignment.objects.filter(id=assignment_id)
+    assignments = Assignment.objects.get(id=assignment_id)
+    workspace = assignments.workspace
+    all_s= Membership.objects.filter(workspace=workspace)
+    print(all_s)
+    assigned = Membership.objects.filter(workspace=workspace).count()
+    submission = Submission.objects.filter(assignment=assignments)
+    submitted = submission.count()
+    assignment_date = assignments.due_date
+    all_students = Student.objects.filter(membership__workspace=workspace)
+    print(all_students)
+    not_submitted_students = []
+    for student in all_students:
+        if not submission.filter(student=student).exists():
+            not_submitted_students.append(student)
+    return render(request, 'class/view_submissions.html', {
+        'not_submitted_students': not_submitted_students,
+        'assignment_date': assignment_date,
+        'assignment': assignment,
+        'joinees': assigned,
+        'submitted': submitted,
+        'submissions': submission
+        })
 
 def index(request):
     return render(request,'index.html')
