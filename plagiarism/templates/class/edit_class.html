@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% block title %} Edit workspace {% endblock %}
+{% load static %}
+{% block content %}
+<div class="row" style="margin: 0 auto;">
+    <div class="col-3">
+
+    </div>
+    <div class="col-6" style="padding: 30px; background-color: #ebf4fb; margin-top:20px; border-radius: 10px; text-align: center; ">
+        <h2 class="text-center">Update Class</h2>
+        <br>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="name" class="form-control" placeholder="Write the Class Name" value="{{ workspace.name }}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="stream" class="form-control" placeholder="Give a Class Unit" value="{{ workspace.stream }}" required>
+            </div>
+            <textarea name="detail" id="" class="form-control" cols="30" rows="10" placeholder="Describe more about the Class" required>{{ workspace.details }}</textarea>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin: 10px auto;">Update</button>
+        </form>
+    </div>
+    <div class="col-3">
+        
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 from profiles.models  import Teacher,User,Student
 import random
 import string
+from django.utils import timezone
 import uuid
 
 class Time(models.Model):
@@ -18,9 +19,7 @@ class WorkSpace(Time):
     code = models.CharField(max_length=8, blank=True, null=True) # random 
     details = models.TextField() 
     teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL, null=True,related_name='room')
-    #tudent = models.ManyToManyField(Student,through='MemberShip', related_name='s_room')
-    students = models.ManyToManyField(User, related_name='workspace', blank=True)
-
+    # students = models.ManyToManyField(Student, through='Membership', related_name='workspaces')
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -30,12 +29,35 @@ class WorkSpace(Time):
         
     def __str__(self):
         return self.name 
-    
-# Group member
-class MemberShip(models.Model):
-    room = models.ForeignKey(WorkSpace,on_delete=models.CASCADE, null=True,related_name='classroom')
-    student = models.ForeignKey(Student,on_delete=models.CASCADE, null=True, related_name='members')
-    is_join = models.BooleanField(default=False)
+
+
+class Membership(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    workspace = models.ForeignKey(WorkSpace, on_delete=models.CASCADE)
+    joining_date=models.DateTimeField(auto_now_add=True,null=True)
+    class Meta:
+        unique_together = ['student', 'workspace']
+
+class Assignment(Time):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workspace = models.ForeignKey(WorkSpace, on_delete=models.CASCADE, related_name='assignments')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='assignments')
+    title = models.CharField(max_length=200)
+    instructions = models.TextField()
+    points=models.IntegerField(null=True)
+    pdf = models.FileField(upload_to='assignments/',null=True)
+    due_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{ self.room } | { self.student }"
+        return self.title
+
+class Submission(Time):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='submissions')
+    submitted_file = models.FileField(upload_to='submissions/')
+    grade_granded=models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.assignment
+

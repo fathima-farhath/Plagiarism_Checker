@@ -1,10 +1,11 @@
 {% extends 'class/base.html' %}
+{% load static %}
 {% block class_link %}
 <div class="navbar-nav ml-auto">
-    <a class="nav-item nav-link active" href="{% url 'single' room.id %}"><i class="fas fa-bars"></i>  Stream<span class="sr-only">(current)</span></a>
+    {% comment %} <a class="nav-item nav-link active" href="{% url 'single' room.id %}"><i class="fas fa-bars"></i>  Stream<span class="sr-only">(current)</span></a>
     <a class="nav-item nav-link" href="#"><i class="fas fa-file-signature"></i> Files</a>
     <a class="nav-item nav-link" href="{% url 'people' room.id %}"> <i class="fas fa-users"></i> People</a>
-    <a class="nav-item nav-link" href=""  data-toggle="modal" data-target="#exampleModal">Leave Class <i class="fas fa-sign-out-alt"></i> </a>
+    <a class="nav-item nav-link" href=""  data-toggle="modal" data-target="#exampleModal">Leave Class <i class="fas fa-sign-out-alt"></i> </a> {% endcomment %}
 
   </div>
 {% endblock %}
@@ -24,11 +25,12 @@
 {% block content %}
 
     <div class="row mt-3">
-        
+        {% for name in joined_students_names %}
         <div class="col-2 box m-2 p-3">
-            <img src="{{ s.photo.url  }}" alt="">
-            <h4 class="text">Farhana</h4>
+            <img src="https://www.pngarts.com/files/11/Avatar-PNG-Transparent-Image.png" class="img" alt="">
+            <p>{{ name }}</p>
         </div>
+        {% endfor %}
         
     </div>
 {% endblock %}

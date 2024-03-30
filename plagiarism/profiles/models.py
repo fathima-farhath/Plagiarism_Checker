@@ -34,9 +34,8 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(null=True,max_length=200,verbose_name='Username',unique=True,blank=True)
+    username = models.CharField(null=True,max_length=200,verbose_name='',unique=True,blank=True)
     email = models.EmailField(_('email_address'), unique=True)
 
     password = models.CharField(max_length=10000)
