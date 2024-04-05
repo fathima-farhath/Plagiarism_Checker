@@ -39,11 +39,19 @@ def create_class(request):
 
 @login_required(login_url='login')
 def teacher(request):
+    result,is_plagiarized=check(request)
     teacher = request.user.teachers
     workspaces = WorkSpace.objects.filter(teacher=teacher).order_by('-created_at')
+    if result is not None:
+        if is_plagiarized:
+            message = f"The document is plagiarized with {result:.2f}% plagiarism."
+        else:
+            message = "The document is not plagiarized."
+    else:
+        message = None
     if not workspaces:
         messages.success(request,'No workspce exists !!')
-    return render(request,'dashboard/teacher/teacher.html',{'workspace': workspaces}) 
+    return render(request,'dashboard/teacher/teacher.html',{'workspace': workspaces,'message': message}) 
 
 
 @login_required(login_url='login')   
@@ -59,6 +67,7 @@ def edit_workspace(request,workspace_id):
     else:
         return render(request, 'class/edit_class.html', {'workspace': workspace}) 
 
+@login_required(login_url='login')
 def delete_workspace(request, workspace_id):
     print("Hello")
     try:
