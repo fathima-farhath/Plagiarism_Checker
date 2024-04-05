@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from . models import *
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -10,6 +9,17 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+import joblib
+from pprint import PrettyPrinter
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import string
+import fitz  # PyMuPDF
+import tempfile
+from ML_model.views import *
 # Create your views here.
 
 @login_required(login_url='login')
@@ -50,10 +60,11 @@ def edit_workspace(request,workspace_id):
         return render(request, 'class/edit_class.html', {'workspace': workspace}) 
 
 def delete_workspace(request, workspace_id):
+    print("Hello")
     try:
         workspace = WorkSpace.objects.get(id=workspace_id)
         workspace.delete()
-        messages.succes(request,'Workspace deleted Successfully')
+        messages.success(request,'Workspace deleted Successfully')
         return redirect('teacher')
     except WorkSpace.DoesNotExist:
         raise Http404("Workspace does not exist")
@@ -165,13 +176,23 @@ def update_sub(request,assignment_id):
     return render(request,'class/update_sub.html',{'assignment': assignment, 'submissions': submissions})
 
 
+
+        #messages.success("Plagiarism amount= ",plagiarism_amount)
+
 @login_required(login_url='login')   
 def student(request):
-    # Fetch the current logged-in student
+    result,is_plagiarized=check(request)
     student = request.user.students
     # Get the workspaces joined by the student
     joined_workspaces = WorkSpace.objects.filter(membership__student=student).order_by('-membership__joining_date')
-    return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces})  
+    if result is not None:
+        if is_plagiarized:
+            message = f"The document is plagiarized with {result:.2f}% plagiarism."
+        else:
+            message = "The document is not plagiarized."
+    else:
+        message = None
+    return render(request, 'dashboard/student/student.html', {'joined_workspaces': joined_workspaces,'message': message})  
 
 def people(request,workspace_id):
     workspace = WorkSpace.objects.get(id=workspace_id)

@@ -174,10 +174,8 @@ function showPdfContent() {
     document.getElementById("pdf_content").style.display = "block";
     document.getElementById("text_content").style.display = "none";
 }
-function confirmDelete(workspaceId) {
-
-    return confirm('Are you sure you want to delete this workspace?');
-    
+function confirmDelete(id) {
+    return confirm("Are you sure you want to delete workspace " + id + "?");
 }
 
 </script>

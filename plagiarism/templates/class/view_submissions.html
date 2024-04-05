@@ -93,7 +93,7 @@
                     <td style="color:green;">On time({{submission_time}})</td>
                     {% endif %}
                     {% endwith %}
-                    <td>_/{{i.points}}</td>
+                    <td><a href="{% url '' %}">_</a>/{{i.points}}</td>
                 </tr>
                 {% endfor %}
         </table>
