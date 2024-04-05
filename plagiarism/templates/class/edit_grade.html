@@ -1,0 +1,86 @@
+{% extends 'class/base.html' %}
+{% load static %}
+{% block class_link %}
+{% endblock %}
+{% block css %}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+.grade-input-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content:center; /* Vertically center the content */
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+input[type="number"] {
+    padding: 5px; /* Adjust padding */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px; /* Adjust font size */
+    width: 80px; /* Adjust width */
+}
+p{
+    font-size:25px;
+}
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.txt{
+    color:blue;
+}
+button:hover {
+    background-color: #0056b3;
+}
+{% endblock %}
+  {% block content %}
+  <div class="row" style="margin: 0 auto;">
+    <div class="col-4">
+
+    </div>
+    <div class="col-4" style="padding: 30px; background-color: #ebf4fb; margin-top:50px; border-radius: 10px; text-align: center; ">
+    
+    <h2 class="text-center txt">Edit grade</h2>
+  <form method="POST" onsubmit="return validateGrade()">
+      {% csrf_token %}
+      <label for="new_grade">New Grade:</label>
+      <div class="grade-input-container">
+        <input type="number" id="new_grade" name="new_grade" value="{{ submission.grade_granded }}" max="{{ points }}" min="0">
+         <p>/{{ points }}</p>
+    </div><button type="submit">Save</button>
+  </form>
+</div>
+<div class="col-4">
+    
+</div>
+</div>
+  
+  <script>
+      function validateGrade() {
+          var newGradeInput = document.getElementById("new_grade");
+          var newGrade = parseFloat(newGradeInput.value);
+          var maxGrade = parseFloat(newGradeInput.getAttribute("max"));
+  
+          if (newGrade > maxGrade) {
+              alert("Grade cannot exceed the maximum points.");
+              return false; // Prevent form submission
+          }
+          return true; // Allow form submission
+      }
+  </script>
+  
+{% endblock %}

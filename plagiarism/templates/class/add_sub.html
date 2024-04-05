@@ -29,7 +29,15 @@
             </div>
             <p>Due Date: {{i.due_date}}</p>
         </div>
-        <p>Total grade: {{i.points}}</p>
+        <p>
+            {% if submissions.exists %}
+                {% if submissions.0.grade_granded %}
+                    Graded: {{ submissions.0.grade_granded }} / {{ i.points }}
+                {% else %}
+                Total grade: {{ i.points }}
+                {% endif %}
+            {% endif %}
+        </p>
             <hr style="background:#007bff;">
         <div>
         <p>{{i.instructions}}</p>
