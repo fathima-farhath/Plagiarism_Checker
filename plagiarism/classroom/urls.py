@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('create_class/', views.create_class,name='create_class'),
     path('edit_class/<uuid:workspace_id>/', views.edit_workspace,name='edit_class'),
-    path('delete/<uuid:workspace_id>/', views.delete_workspace, name='delete_workspace'),
+    path('deletes/<uuid:workspace_id>/', views.delete_workspace_try, name='delete_workspace_try'),
     path('workspace/<uuid:workspace_id>/', views.open_workspace, name='open_workspace'),
     # path('single/', views.single, name='single'),
     path('send_mail/', views.send_mail, name = 'send_mail'),

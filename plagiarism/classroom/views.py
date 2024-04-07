@@ -68,15 +68,13 @@ def edit_workspace(request,workspace_id):
         return render(request, 'class/edit_class.html', {'workspace': workspace}) 
 
 @login_required(login_url='login')
-def delete_workspace(request, workspace_id):
+def delete_workspace_try(request, workspace_id):
     print("Hello")
-    try:
-        workspace = WorkSpace.objects.get(id=workspace_id)
-        workspace.delete()
-        messages.success(request,'Workspace deleted Successfully')
-        return redirect('teacher')
-    except WorkSpace.DoesNotExist:
-        raise Http404("Workspace does not exist")
+    workspace = WorkSpace.objects.get(id=workspace_id)
+    workspace.delete()
+    messages.success(request,'Workspace deleted Successfully')
+    return redirect('teacher')
+    
 
 @login_required(login_url='login')
 def add_assignment(request, workspace_id):
@@ -289,7 +287,7 @@ def automatic_grading(request, submission_id):
     
     if not is_plagiarised:
       answer_key_path = assignments.pdf.path
-      answer_key_pdf_bytes = open(student_document_path, "rb").read()
+      answer_key_pdf_bytes = open(answer_key_path, "rb").read()
       answer_key = read_input(answer_key_pdf_bytes)
 
       max_grade=assignments.points
@@ -320,11 +318,11 @@ def automatic_grading(request, submission_id):
 def edit_grade(request, submission_id):
     if request.method == 'POST':
         submission = Submission.objects.get(id=submission_id)
-        new_grade = request.POST.get('new_grade')  # Assuming you have a form input field named 'new_grade'
+        new_grade = request.POST.get('new_grade')  
         submission.grade_granded = new_grade
         submission.save()
         return redirect('view_sub', assignment_id=submission.assignment.id)
     else:
         submission = Submission.objects.get(id=submission_id)
-        points = submission.assignment.points  # Fetch points from assignment
+        points = submission.assignment.points  
         return render(request, 'class/edit_grade.html', {'submission': submission, 'points': points})
